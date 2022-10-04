@@ -16,6 +16,7 @@ const participantSchema = new mongoose.Schema({
         },
         role:{
             type:String,
+            required:true,
             enum:["Interviewer","Interviewee"]
         }
     },
