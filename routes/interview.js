@@ -1,8 +1,18 @@
 import express from "express";
+import nodemailer from 'nodemailer';
 import InterviewRoom from "../models/InterviewRoom.js";
 
 const router = express.Router()
 
+let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
+    }
+  });
 
 //GET Interview Room
 router.get("/",async(req,res)=>{
@@ -65,10 +75,20 @@ router.post("/",async(req,res)=>{
     }
 
     const interview = await newInterview.save()
+
+    const mailOptions = {
+        from: 'scalerassignment@gmail.com', // Sender address
+        to: participants.concat(admins), // List of recipients
+        subject: 'Interview Scheduled', // Subject line
+        text: `Please join the interview at ${startTime}`, // Plain text body
+    };
+    
+    transporter.sendMail(mailOptions);
+
     res.status(200).json(interview)
 
     }catch (error) {
-        // console.log(error)
+        console.log(error)
         res.status(500).send(error)
     }
 })
