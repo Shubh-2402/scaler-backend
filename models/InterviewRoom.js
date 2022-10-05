@@ -14,6 +14,10 @@ const interviewRoomSchema = new mongoose.Schema({
             type:Date,
             required:true
         },
+        admins:{
+            type:Array,
+            default:[]
+        },
         participants:{
             type:Array,
             default:[]
